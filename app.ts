@@ -1,10 +1,12 @@
 import express from 'express';
-import cors from 'cors';
+
+
 import { encoding_for_model } from 'tiktoken';
-import { PricingModel } from './models/pricingModel';
+import { PricingModel } from './models/pricingModel'; 
+
 
 const app = express();
-app.use(cors());
+
 app.use(express.json());
 
 // Function to calculate token count
