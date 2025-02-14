@@ -1,21 +1,16 @@
-import { Request, Response } from 'express';
-import { calculateCost } from '../services/pricingServices';
-import PricingModel from '../models/pricingModel';
+import { Request, Response } from "express";
+import { calculateCost } from "../services/pricingServices";
 
-export const calculatePricing = async (req: Request, res: Response) => {
+export const calculatePricing = (req: Request, res: Response): void => {
     try {
-        const { tokens, userId } = req.body;
+        const { tokens } = req.body;
 
-        if (!tokens || !userId) {
-            return res.status(400).json({ error: "Tokens and userId are required" });
+        if (!tokens) {
+            res.status(400).json({ error: "Tokens are required" });
+            return;
         }
 
         const estimatedCost = calculateCost(tokens);
-
-        // Store usage in DB
-        const usage = new PricingModel({ userId, tokens, cost: estimatedCost });
-        await usage.save();
-
         res.json({ tokens, estimatedCost: estimatedCost.toFixed(6) });
     } catch (error) {
         res.status(500).json({ error: (error as Error).message });
